@@ -1,0 +1,61 @@
+
+<div class="mat-elevation-z8">
+
+  <table mat-table [dataSource]="dataSource" class="mat-table-custom">
+
+    <!-- Coluna Nome -->
+    <ng-container matColumnDef="nome">
+      <th mat-header-cell *matHeaderCellDef> Nome </th>
+      <td mat-cell *matCellDef="let pessoa"> {{ pessoa.nome }} </td>
+    </ng-container>
+
+    <!-- Coluna Idade -->
+    <ng-container matColumnDef="idade">
+      <th mat-header-cell *matHeaderCellDef> Idade </th>
+      <td mat-cell *matCellDef="let pessoa"> {{ pessoa.idade }} </td>
+    </ng-container>
+
+    <!-- Coluna Estado Civil -->
+    <ng-container matColumnDef="estadoCivil">
+      <th mat-header-cell *matHeaderCellDef> Estado Civil </th>
+      <td mat-cell *matCellDef="let pessoa"> {{ pessoa.estadoCivil }} </td>
+    </ng-container>
+
+    <!-- Coluna CPF -->
+    <ng-container matColumnDef="cpf">
+      <th mat-header-cell *matHeaderCellDef> CPF </th>
+      <td mat-cell *matCellDef="let pessoa"> {{ pessoa.cpf }} </td>
+    </ng-container>
+
+    <!-- Coluna Cidade -->
+    <ng-container matColumnDef="cidade">
+      <th mat-header-cell *matHeaderCellDef> Cidade </th>
+      <td mat-cell *matCellDef="let pessoa"> {{ pessoa.cidade }} </td>
+    </ng-container>
+
+    <!-- Coluna Estado -->
+    <ng-container matColumnDef="estado">
+      <th mat-header-cell *matHeaderCellDef class="mat-column-estado"> Estado </th>
+      <td mat-cell *matCellDef="let pessoa" class="mat-column-estado"> {{ pessoa.estado }} </td>
+    </ng-container>
+
+    <!-- Coluna Ações -->
+    <ng-container matColumnDef="acoes" class="mat-column-acoes">
+      <th mat-header-cell *matHeaderCellDef> Ações </th>
+      <td mat-cell *matCellDef="let pessoa">
+        <button mat-icon-button color="primary" (click)="editPessoa(pessoa)">
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button mat-icon-button color="warn" (click)="deletePessoa(pessoa.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+</div>
