@@ -25,6 +25,7 @@ services/ → Onde está o pessoa.service.ts, que faz as chamadas HTTP para o ba
 assets/ → Arquivos estáticos, como imagens e estilos.
 
 O que já está funcionando?
+
 ✅ Listagem de Pessoas → Exibe as pessoas cadastradas em uma tabela, mostrando nome, idade, estado civil, CPF, cidade e estado.
 
 ✅ Cadastro de Pessoas → Formulário onde você pode adicionar uma nova pessoa com todos os dados necessários.
