@@ -66,8 +66,7 @@ export class PessoaFormComponent {
 
     this.pessoaService.addPessoa(this.novaPessoa).subscribe(() => {
       console.log("Pessoa adicionada com sucesso!");
-      this.pessoaAdicionada.emit(); // Dispara evento para atualizar a tabela
-      this.novaPessoa = { // Limpa o formulário após adicionar
+      this.novaPessoa = {
         nome: '',
         idade: null,
         estadoCivil: '',
