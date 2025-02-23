@@ -1,18 +1,17 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { PessoaService } from '../services/pessoa.service';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subscription } from 'rxjs';
+import { PessoaService } from '../services/pessoa.service';
 
 @Component({
   selector: 'app-pessoa-list',
   templateUrl: './pessoa-list.component.html',
   styleUrls: ['./pessoa-list.component.css']
 })
-export class PessoaListComponent implements OnInit, AfterViewInit, OnDestroy {
+
+export class PessoaListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['nome', 'idade', 'estadoCivil', 'cpf', 'cidade', 'estado', 'acoes'];
   dataSource = new MatTableDataSource<any>();
-  private subscription!: Subscription;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -20,28 +19,18 @@ export class PessoaListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadPessoas();
-    // Inscreve para atualizações
-    this.subscription = this.pessoaService.pessoaAdicionada$.subscribe(() => {
-      this.loadPessoas();
-    });
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
-  ngOnDestroy(): void {
-    // Limpa a inscrição para evitar memory leaks
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
 
   loadPessoas(): void {
     this.pessoaService.getPessoas().subscribe(data => {
       console.log("Lista de pessoas atualizada:", data);
-      this.dataSource.data = data; // Atualiza os dados da tabela
-      this.dataSource.paginator = this.paginator;
+      this.dataSource = new MatTableDataSource(data || []); // Garante que os dados são reatribuídos corretamente
+      this.dataSource.paginator = this.paginator; // Mantém paginação funcionando
     });
   }
 
