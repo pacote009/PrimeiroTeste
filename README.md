@@ -43,8 +43,6 @@ O que estou melhorando?
 
 Formulário mais intuitivos > Formulário de adição e alteração na própria tela, sem um prompt.
 
-Atualização automática da tabela ao adicioanr um novo usuário,, no momento a atualização funciona após o F5.
-
 Notificação de sucesso ou erro ao adicionar um usuário.
 
 Validação no Backend
