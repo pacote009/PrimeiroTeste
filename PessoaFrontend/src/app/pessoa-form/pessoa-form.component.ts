@@ -1,24 +1,18 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { PessoaService } from '../services/pessoa.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-pessoa-form',
   templateUrl: './pessoa-form.component.html',
-  styleUrls: ['./pessoa-form.component.css']
+  styleUrls: ['./pessoa-form.component.css'],
 })
 export class PessoaFormComponent {
-  @Output() pessoaAdicionada = new EventEmitter<void>(); // Evento para atualizar a lista automaticamente
-
-  novaPessoa = {
-    nome: '',
-    idade: null,
-    estadoCivil: '',
-    cpf: '',
-    cidade: '',
-    estado: ''
-  };
-
-  estadosCivis: string[] = ['Solteiro', 'Casado', 'Viúvo', 'Divorciado', 'Separado']; // Lista suspensa
+  pessoaForm: FormGroup;
+  isEdit: boolean;
+  brazilStates: any;
+  maritalStatuses: any;
 
   validarCPF(event: KeyboardEvent) {
     const inputChar = String.fromCharCode(event.keyCode || event.which);
@@ -26,55 +20,41 @@ export class PessoaFormComponent {
       event.preventDefault(); // Impede a entrada de caracteres inválidos
     }
   }
-  estadosBrasil = [
-    { nome: 'Acre', sigla: 'AC' },
-    { nome: 'Alagoas', sigla: 'AL' },
-    { nome: 'Amapá', sigla: 'AP' },
-    { nome: 'Amazonas', sigla: 'AM' },
-    { nome: 'Bahia', sigla: 'BA' },
-    { nome: 'Ceará', sigla: 'CE' },
-    { nome: 'Distrito Federal', sigla: 'DF' },
-    { nome: 'Espírito Santo', sigla: 'ES' },
-    { nome: 'Goiás', sigla: 'GO' },
-    { nome: 'Maranhão', sigla: 'MA' },
-    { nome: 'Mato Grosso', sigla: 'MT' },
-    { nome: 'Mato Grosso do Sul', sigla: 'MS' },
-    { nome: 'Minas Gerais', sigla: 'MG' },
-    { nome: 'Pará', sigla: 'PA' },
-    { nome: 'Paraíba', sigla: 'PB' },
-    { nome: 'Paraná', sigla: 'PR' },
-    { nome: 'Pernambuco', sigla: 'PE' },
-    { nome: 'Piauí', sigla: 'PI' },
-    { nome: 'Rio de Janeiro', sigla: 'RJ' },
-    { nome: 'Rio Grande do Norte', sigla: 'RN' },
-    { nome: 'Rio Grande do Sul', sigla: 'RS' },
-    { nome: 'Rondônia', sigla: 'RO' },
-    { nome: 'Roraima', sigla: 'RR' },
-    { nome: 'Santa Catarina', sigla: 'SC' },
-    { nome: 'São Paulo', sigla: 'SP' },
-    { nome: 'Sergipe', sigla: 'SE' },
-    { nome: 'Tocantins', sigla: 'TO' }
-  ];
 
-  constructor(private pessoaService: PessoaService) {}
+  constructor(
+    private pessoaService: PessoaService,
+    public dialogRef: MatDialogRef<PessoaFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private fb: FormBuilder
+  ) {
+    this.brazilStates = this.pessoaService.getAllStates();
+    this.maritalStatuses = this.pessoaService.getMaritalStatuses();
 
-  addPessoa(): void {
-    if (!this.novaPessoa.nome || !this.novaPessoa.idade) {
-      alert("Preencha todos os campos obrigatórios!");
-      return;
-    }
+    this.isEdit = data.isEdit;
 
-    this.pessoaService.addPessoa(this.novaPessoa).subscribe(() => {
-      console.log("Pessoa adicionada com sucesso!");
-      this.pessoaAdicionada.emit(); // Dispara evento para atualizar a tabela
-      this.novaPessoa = { // Limpa o formulário após adicionar
-        nome: '',
-        idade: null,
-        estadoCivil: '',
-        cpf: '',
-        cidade: '',
-        estado: ''
-      };
+    this.pessoaForm = this.fb.group({
+      id: [data.pessoa ? data.pessoa.id : null],
+      nome: [data.pessoa ? data.pessoa.nome : '', Validators.required],
+      idade: [data.pessoa ? data.pessoa.idade : '', Validators.required],
+      estadoCivil: [data.pessoa ? data.pessoa.estadoCivil : ''],
+      cpf: [data.pessoa ? data.pessoa.cpf : '', Validators.required],
+      cidade: [data.pessoa ? data.pessoa.cidade : ''],
+      estado: [data.pessoa ? data.pessoa.estado : ''],
     });
+  }
+
+  save() {
+    if (this.pessoaForm.valid) {
+      let pessoaData = this.pessoaForm.value;
+      if (!this.isEdit) {
+        delete pessoaData.id;
+      }
+
+      this.dialogRef.close(this.pessoaForm.value);
+    }
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 }

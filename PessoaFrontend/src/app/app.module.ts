@@ -8,7 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,6 +18,12 @@ import { MatInputModule } from '@angular/material/input';
 
 // ✅ Importação do RouterModule
 import { RouterModule, Routes } from '@angular/router';
+import { GridModule } from '@progress/kendo-angular-grid';
+import { InputsModule } from '@progress/kendo-angular-inputs';
+import { ButtonsModule } from '@progress/kendo-angular-buttons';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 // ✅ Definição das rotas
 const routes: Routes = [
@@ -32,6 +38,13 @@ const routes: Routes = [
     PessoaFormComponent
   ],
   imports: [
+    ReactiveFormsModule,
+    MatDialogModule,
+    FormsModule,
+    DropDownsModule,
+    ButtonsModule,
+    InputsModule,
+    GridModule,
     BrowserModule,
     MatTableModule,
     MatPaginatorModule,

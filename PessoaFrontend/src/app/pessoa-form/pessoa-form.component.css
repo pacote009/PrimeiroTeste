@@ -1,24 +1,24 @@
 .form-container {
   display: flex;
-  align-items: center; /* Alinha todos os elementos no centro verticalmente */
-  gap: 10px; /* Espaço entre os campos */
-  flex-wrap: wrap; /* Permite que os elementos se ajustem caso a tela seja menor */
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 20px;
 }
 
 mat-form-field {
-  flex: 1; /* Ocupa o espaço disponível */
-  min-width: 150px; /* Garante um tamanho mínimo */
+  width: 100%;
 }
 
-.button-container {
+.mat-dialog-container {
+  padding: 24px !important;
+  border-radius: 10px;
+}
+
+.buttons-container {
   display: flex;
-  align-items: right;
-  height: 56px; /* Mesmo tamanho dos campos */
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
 }
 
-button {
-  height: 100%;
-  background-color: #3f51b5 !important; /* Cor azul */
-  color: white !important;
-  min-width: 100px; /* Define um tamanho mínimo para o botão */
-}

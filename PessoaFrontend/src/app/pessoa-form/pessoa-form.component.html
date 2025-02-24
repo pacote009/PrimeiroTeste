@@ -1,50 +1,56 @@
-<h2>Adicionar Pessoa</h2>
-<form (ngSubmit)="addPessoa()">
-
-
-  <div class="form-container">
+<h2 mat-dialog-title>{{ isEdit ? "Editar Pessoa" : "Adicionar Pessoa" }}</h2>
+<mat-dialog-content class="form-container">
+  <form [formGroup]="pessoaForm">
     <mat-form-field appearance="outline">
-      <mat-label>Nome</mat-label>
-      <input matInput type="text" [(ngModel)]="novaPessoa.nome" name="nome" required />
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="nome" required />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Idade</mat-label>
-      <input matInput type="number" [(ngModel)]="novaPessoa.idade" name="idade" required />
+      <mat-label>Age</mat-label>
+      <input matInput type="number" formControlName="idade" required />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Estado Civil</mat-label>
-      <mat-select [(ngModel)]="novaPessoa.estadoCivil" name="estadoCivil">
-        <mat-option *ngFor="let estado of estadosCivis" [value]="estado">
-          {{ estado }}
+      <mat-label>Maritual Status</mat-label>
+      <mat-select formControlName="estadoCivil">
+        <mat-option *ngFor="let estadoCivil of maritalStatuses" [value]="estadoCivil.value">
+          {{ estadoCivil.label }}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>CPF</mat-label>
-      <input matInput type="text" [(ngModel)]="novaPessoa.cpf" name="cpf"
-             maxlength="11" minlength="11" pattern="^[0-9]*$"
-             (keypress)="validarCPF($event)" required />
+      <input matInput formControlName="cpf" required />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Cidade</mat-label>
-      <input matInput type="text" [(ngModel)]="novaPessoa.cidade" name="cidade" />
+      <mat-label>City</mat-label>
+      <input matInput formControlName="cidade" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Estado</mat-label>
-      <mat-select [(ngModel)]="novaPessoa.estado" name="estado">
-        <mat-option *ngFor="let estado of estadosBrasil" [value]="estado.sigla">
+      <mat-label>States</mat-label>
+      <mat-select formControlName="estado">
+        <mat-option *ngFor="let estado of brazilStates" [value]="estado.sigla">
           {{ estado.nome }}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
-    <div class="button-container">
-      <button mat-raised-button color="primary" type="submit">Adicionar</button>
+    <div class="buttons-container">
+      <button type="button" class="btn btn-danger" (click)="close()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        [ngClass]="pessoaForm.invalid ? 'btn btn-light' : 'btn btn-success'"
+        (click)="save()"
+        [disabled]="pessoaForm.invalid"
+      >
+        {{ isEdit ? "Edit"  : "Add" }}
+      </button>
     </div>
-  </div>
-</form>
+  </form>
+</mat-dialog-content>

@@ -1,90 +1,94 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 import { PessoaService } from '../services/pessoa.service';
+import { PessoaFormComponent } from '../pessoa-form/pessoa-form.component';
+
+interface Pessoa {
+  id: number;
+  nome: string;
+  idade: number;
+  estadoCivil: string;
+  cpf: string;
+  cidade: string;
+  estado: string;
+}
 
 @Component({
   selector: 'app-pessoa-list',
   templateUrl: './pessoa-list.component.html',
-  styleUrls: ['./pessoa-list.component.css']
+  styleUrls: ['./pessoa-list.component.css'],
 })
-
 export class PessoaListComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['nome', 'idade', 'estadoCivil', 'cpf', 'cidade', 'estado', 'acoes'];
-  dataSource = new MatTableDataSource<any>();
+  displayedColumns: string[] = [
+    'nome',
+    'idade',
+    'estadoCivil',
+    'cpf',
+    'cidade',
+    'estado',
+    'acoes',
+  ];
+  dataSource = new MatTableDataSource<Pessoa>([]);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private pessoaService: PessoaService) { }
+  constructor(
+    private pessoaService: PessoaService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-    this.loadPessoas();
+    this.loadData();
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
-
-  loadPessoas(): void {
-    this.pessoaService.getPessoas().subscribe(data => {
-      console.log("Lista de pessoas atualizada:", data);
-      this.dataSource = new MatTableDataSource(data || []); // Garante que os dados são reatribuídos corretamente
-      this.dataSource.paginator = this.paginator; // Mantém paginação funcionando
+  // Recupera os dados do serviço
+  loadData(): void {
+    this.pessoaService.getPessoas().subscribe((data) => {
+      this.dataSource.data = data.reverse(); // Ordena do último para o primeiro
     });
   }
 
-  deletePessoa(id: number): void {
-    this.pessoaService.deletePessoa(id).subscribe(() => this.loadPessoas());
+  openAddModal(): void {
+    const dialogRef = this.dialog.open(PessoaFormComponent, {
+      width: '500px',
+      data: { pessoa: null, isEdit: false },
+    });
+
+    dialogRef.afterClosed().subscribe((result: Pessoa) => {
+      if (result) {
+        this.pessoaService.addPessoa(result).subscribe(() => {
+          this.loadData();
+        });
+      }
+    });
   }
-  editPessoa(pessoa: any): void {
-    const estadosCivisPermitidos = ["Solteiro", "Casado", "Viúvo", "Divorciado", "Separado"];
-    const estadosPermitidos = [
-      "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG",
-      "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"
-    ];
 
-    const cpfRegex = /^[0-9]{11}$/; // Apenas 11 números
+  openEditModal(pessoa: Pessoa): void {
+    const dialogRef = this.dialog.open(PessoaFormComponent, {
+      width: '500px',
+      data: { pessoa: pessoa, isEdit: true },
+    });
 
-    const novoNome = prompt("Digite o novo nome:", pessoa.nome);
-    const novaIdade = prompt("Digite a nova idade:", pessoa.idade);
-    const novoEstadoCivil = prompt(
-      `Digite o novo estado civil (${estadosCivisPermitidos.join(", ")}):`,
-      pessoa.estadoCivil
-    );
-    const novoCpf = prompt("Digite o novo CPF (apenas números):", pessoa.cpf);
-    const novaCidade = prompt("Digite a nova cidade:", pessoa.cidade);
-    const novoEstado = prompt(
-      `Digite o novo estado (sigla, ex: RJ, SP, MG):`,
-      pessoa.estado
-    );
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.pessoaService.updatePessoa(result).subscribe(() => {
+          this.loadData();
+        });
+      }
+    });
+  }
 
-
-    // Verifica se os valores não estão vazios e se são válidos
-    if (novoNome !== null && novoNome.trim() !== "" &&
-        novaIdade !== null && novaIdade.trim() !== "" &&
-        novaCidade !== null && novaCidade.trim() !== "" &&
-        novoEstado !== null && estadosPermitidos.includes(novoEstado.toUpperCase()) &&
-        novoEstadoCivil !== null && estadosCivisPermitidos.includes(novoEstadoCivil) &&
-        novoCpf !== null && cpfRegex.test(novoCpf)) { // Valida o CPF
-
-      const pessoaAtualizada = {
-        ...pessoa,
-        nome: novoNome,
-        idade: parseInt(novaIdade, 10),
-        estadoCivil: novoEstadoCivil,
-        cidade: novaCidade,
-        estado: novoEstado.toUpperCase(),
-        cpf: novoCpf
-      };
-
-      this.pessoaService.updatePessoa(pessoaAtualizada).subscribe(() => {
-        this.loadPessoas();
-        console.log("Pessoa editada com sucesso!");
+  delete(id: number): void {
+    if (confirm('Tem certeza que deseja excluir esta pessoa?')) {
+      this.pessoaService.deletePessoa(id).subscribe(() => {
+        this.loadData();
       });
-    } else {
-      alert("Dados inválidos! Verifique o Estado Civil, Estado e CPF (11 números).");
     }
   }
-
 }

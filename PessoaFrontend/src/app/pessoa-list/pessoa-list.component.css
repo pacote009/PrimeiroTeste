@@ -40,12 +40,44 @@
 }
 
 /* Estilo para cabeçalho e células */
-th.mat-header-cell, td.mat-cell {
+th.mat-header-cell,
+td.mat-cell {
   padding: 8px;
   border-right: 1px solid #e0e0e0;
 }
 
 /* Alinhamento vertical centralizado */
-.mat-header-row, .mat-row {
+.mat-header-row,
+.mat-row {
   align-items: center;
+}
+
+/* Estilizando os cabeçalhos da tabela */
+th {
+  font-family: "Arial", sans-serif; /* Fonte personalizada */
+  font-weight: bold; /* Deixar o texto em negrito */
+  font-size: 16px; /* Ajustar tamanho da fonte */
+  text-transform: uppercase; /* Transformar o texto em maiúsculas */
+  background-color: #343a40; /* Cor de fundo escura (Bootstrap Dark) */
+  color: rgb(0, 0, 0); /* Cor do texto */
+  padding: 12px; /* Espaçamento interno */ /* Centralizar o texto */
+}
+
+.table th {
+  font-size: 30px; /* Aumenta a fonte dos títulos */
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.table td {
+  font-size: 16px;
+}
+.table tbody tr:hover {
+  background-color: #f1f1f1;
+  transition: background 0.3s;
+}
+
+.btn-sm {
+  font-size: 14px;
+  padding: 5px 10px;
 }

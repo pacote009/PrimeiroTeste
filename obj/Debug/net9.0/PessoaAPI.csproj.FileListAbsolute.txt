@@ -158,3 +158,4 @@ C:\Users\Vitor Mello\PessoaAPI\bin\Debug\net9.0\PessoaFrontend\package.json
 C:\Users\Vitor Mello\PessoaAPI\bin\Debug\net9.0\PessoaFrontend\tsconfig.app.json
 C:\Users\Vitor Mello\PessoaAPI\bin\Debug\net9.0\PessoaFrontend\tsconfig.json
 C:\Users\Vitor Mello\PessoaAPI\bin\Debug\net9.0\PessoaFrontend\tsconfig.spec.json
+C:\Users\Vitor Mello\PessoaAPI\obj\Debug\net9.0\PessoaAPI.sourcelink.json
