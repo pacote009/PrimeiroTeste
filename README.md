@@ -36,13 +36,10 @@ O que já está funcionando?
 
 ✅ Validações →
 
-CPF só pode ter números (sem caracteres especiais).
 Estado civil só pode ser um dos permitidos (Solteiro, Casado, Viúvo, Divorciado, Separado).
 Estado só pode ser uma sigla válida (RJ, SP, MG, etc.).
 
 O que estou melhorando?
-
-Formulário mais intuitivos > Formulário de adição e alteração na própria tela, sem um prompt.
 
 Notificação de sucesso ou erro ao adicionar um usuário.
 
